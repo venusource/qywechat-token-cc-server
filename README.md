@@ -43,12 +43,12 @@ git clone https://github.com/venusource/qywechat-token-cc-server.git
 
 ```
 cd qywechat-token-cc-server
-./gradlew buildDocker
+./gradlew jibDockerBuild
 ```
 
 #### 运行Docker容器
 ```
-docker run -d -p 7071:7071 qywechat-token-cc-server:1.0
+docker run -d -p 7071:7071 qywechat-token-cc-server:1.1
 ```
 
 ### 使用
