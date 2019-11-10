@@ -1,0 +1,6 @@
+apiVersion: skaffold/v1
+kind: Config
+build:
+  artifacts:
+  - image: kube.gwunion.cn/cj/qywechat-token-cc-server
+    jib: {}

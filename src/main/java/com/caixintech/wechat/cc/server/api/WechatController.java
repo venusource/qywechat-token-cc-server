@@ -48,6 +48,32 @@ public class WechatController {
 		}
 	}
 	
+	
+	/**
+	 * agentConfig的作用 
+	 * config注入的是企业的身份与权限，而agentConfig注入的是应用的身份与权限。尤其是当调用者为第三方服务商时，
+	 * 通过config无法准确区分出调用者是哪个第三方应用，而在部分场景下，又必须严谨区分出第三方应用的身份，
+	 * 此时即需要通过agentConfig来注入应用的身份信息。
+	 * agentConfig与config的签名算法完全一样，但是jsapi_ticket的获取方法不一样，请特别注意，查看附录5
+	 * 调用wx.agentConfig之前，必须确保先成功调用wx.config
+	 * 当前页面url中的域名必须是在该应用中设置的可信域名。
+	 * agentConfig仅在企业微信1.3.5及以后版本支持。
+	 * agentConfig是一个客户端的异步操作，所以如果需要在页面加载时就调用相关接口，则须把相关接口放在回调函数中调用来确保正确执行。
+	 * 对于用户触发时才调用的接口，则可以直接调用，不需要放在回调函数中。（同一个url仅需调用一次，对于变化url的SPA的web app可在每次url变化时进行调用。
+	 * @param url
+	 * @return
+	 */
+	@RequestMapping(value = "/agentSign", method = RequestMethod.POST)
+	public ResponseEntity<?> agentSign(@RequestParam String url){
+		logger.debug("request jssdk sign:{}",url);
+		try {
+			return ResponseEntity.ok(wechatServerService.signAgentUrl(url));
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
+	}
+	
 	/**
 	 * 获取Access_token，详见：https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140183
 	 * @return 返回access token，格式如下:

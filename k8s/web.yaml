@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: qywechat-token-service
+spec:
+  ports:
+  - port: 8080
+    name: http
+    targetPort: 7071
+    protocol: TCP
+  type: LoadBalancer
+  selector:
+    app: qywechat-token-server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qywechat-token-server
+spec:
+  selector:
+    matchLabels:
+      app: qywechat-token-server
+  template:
+    metadata:
+      labels:
+        app: qywechat-token-server
+    spec:
+      containers:
+      - name: qywechat-token-server
+        image: kube.gwunion.cn/cj/qywechat-token-cc-server
+        ports:
+          - containerPort: 7071
